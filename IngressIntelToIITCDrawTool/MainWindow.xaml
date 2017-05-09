@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IngressIntelToIITCDrawTool"
         mc:Ignorable="d"
-        Title="Ingress Intel IITC Translator" Height="350" Width="525">
+        Title="Ingress Intel IITC Translator" Height="355" Width="525">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="140*"/>
@@ -23,8 +23,8 @@
         <Button x:Name="btnReset" Content="Reset" Margin="0,10,90,10" Grid.Row="2" IsCancel="True" Click="btnReset_Click" HorizontalAlignment="Right" Width="75" Height="19"/>
 
         <StackPanel HorizontalAlignment="Left" Height="19" Margin="10,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="337" Orientation="Horizontal">
-            <RadioButton x:Name="rbIntelToIITC" Content="Intel to IITC" VerticalAlignment="Center" GroupName="IntelLinks" Margin="10,0,0,0" IsChecked="True"/>
-            <RadioButton x:Name="rbIITCToIntel" Content="IITC to Intel" VerticalAlignment="Center" GroupName="IntelLinks" Margin="10,0,0,0"/>
+            <RadioButton x:Name="rbIntelToIITC" Content="Intel -> IITC" VerticalAlignment="Center" GroupName="IntelLinks" Margin="10,0,0,0" IsChecked="True"/>
+            <RadioButton x:Name="rbIITCToIntel" Content="IITC -> Intel" VerticalAlignment="Center" GroupName="IntelLinks" Margin="10,0,0,0" IsEnabled="False"/>
         </StackPanel>
 
     </Grid>

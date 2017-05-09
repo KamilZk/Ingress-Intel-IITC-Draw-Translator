@@ -20,9 +20,10 @@ namespace IngressIntelToIITCDrawTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        //private string strIntel;
-        //private string strIITC;
-        //private string strTemp;
+        private string strIITCBeginSeq = "[{ \"type\":\"polyline\",\"latLngs\" [";
+        private string strIITCEndSeq = "],\"color\":\"#a24ac3\"}]";
+        private string strIITClat = "\"lat\":";
+        private string strIITClng = "\"lng\":";
 
         public MainWindow()
         {
@@ -50,15 +51,14 @@ namespace IngressIntelToIITCDrawTool
                 int indexP2latStart, indexP2latEnd, indexP2lngStart, indexP2lntEng;
 
                 strIntel = tbIntel.Text;
-                indexP1latStart = strIntel.IndexOf("pls=") + 4;
-                strTemp = strIntel.Substring(indexP1latStart);
+                IntelToIITC(strIntel);
 
-                strIITC = "[{ \"type\":\"polyline\",\"latLngs\" [";
-                //string strTemp = strIntel + " strTemp";
+                //tbIITC.Text = strIITC;
+                
 
-                //string strIITC = strTemp + " strIITC";
+                //indexP1latStart = strIntel.IndexOf("pls=") + 4;
+                //strTemp = strIntel.Substring(indexP1latStart);
 
-                tbIITC.Text = strIITC + strTemp + "],\"color\":\"#a24ac3\"}]";
             }
             else if (rbIITCToIntel.IsChecked == true)
             {
@@ -73,6 +73,33 @@ namespace IngressIntelToIITCDrawTool
 
         }
 
+        private void IntelToIITC(String strTemp)
+        {            
+            if(strTemp.Contains("pls="))
+            {
+                int index = strTemp.IndexOf("pls=") + 4;
+                tbIITC.Text += strIITCBeginSeq + index;
+                IntelToIITC(strTemp.Substring(index));
+            }
+            else 
+            {
+                int indexPrzecinek = -1, indexPodreslnik = -1;
 
+                if (strTemp.Contains(','))
+                    indexPrzecinek = strTemp.IndexOf(',');
+                if (strTemp.Contains('_'))
+                    indexPodreslnik = strTemp.IndexOf('_');
+                //TODO: sprawdzic czy indexPrzecinek>indexPodreslnik -> wartosc pierwsza
+
+                //TODO: sprawdzic czy indexPodreslnik>indexPrzecinek -> zakończenie sekwencji i nowy zestaw
+
+                //TODO: jeżeli oba indexy są puste to dodać koniec return
+
+                //TODO: dodawanie sekwencji
+                //tbIITC.Text += strTemp + strIITCEndSeq; //test
+            }
+
+            return;
+        }
     }
 }
