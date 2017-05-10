@@ -46,17 +46,7 @@ namespace IngressIntelToIITCDrawTool
         {
             if(rbIntelToIITC.IsChecked == true)
             {
-                string strIntel, strTemp, strIITC;
-                int indexP1latStart, indexP1latEnd, indexP1lngStart, indexP1lntEng;
-                int indexP2latStart, indexP2latEnd, indexP2lngStart, indexP2lntEng;
-
-                strIntel = tbIntel.Text;
-                IntelToIITC(strIntel);
-
-                //tbIITC.Text = strIITC;
-                
-                //strTemp = strIntel.Substring(indexP1latStart);
-
+                IntelToIITC(tbIntel.Text, 0);
             }
             else if (rbIITCToIntel.IsChecked == true)
             {
@@ -71,13 +61,13 @@ namespace IngressIntelToIITCDrawTool
 
         }
 
-        private void IntelToIITC(String strTemp)
+        private void IntelToIITC(String strTemp, int loopCounter)
         {            
-            if(strTemp.Contains("pls="))
+            if(strTemp.Contains("pls=") && loopCounter == 0)
             {
                 int index = strTemp.IndexOf("pls=") + 3;
                 tbIITC.Text += strIITCBeginSeq;
-                IntelToIITC(strTemp.Substring(index));
+                IntelToIITC(strTemp.Substring(index), loopCounter + 1);
             }
             else 
             {
@@ -87,7 +77,7 @@ namespace IngressIntelToIITCDrawTool
                 {
                     indexPrzecinek = strTemp.IndexOf(',');
                     tbIITC.Text += "{" + strIITClat + strTemp.Substring(1, indexPrzecinek);
-                    IntelToIITC(strTemp.Substring(indexPrzecinek));
+                    IntelToIITC(strTemp.Substring(indexPrzecinek), loopCounter + 1);
                 }
 
                 else if (strTemp[0] == ',')
