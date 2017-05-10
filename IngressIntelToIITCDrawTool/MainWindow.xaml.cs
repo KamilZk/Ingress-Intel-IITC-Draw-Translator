@@ -56,9 +56,15 @@ namespace IngressIntelToIITCDrawTool
 
         private void IntelToIITC(String strTemp, int loopCounter)
         {            
-            if(strTemp.Contains("pls=") && loopCounter == 0)
+            if ( loopCounter == 0)
             {
-                int index = strTemp.IndexOf("pls=") + 4;
+                int index;
+
+                if (strTemp.Contains("pls="))
+                    index = strTemp.IndexOf("pls=") + 4;
+                else
+                    index = 0;
+
                 tbIITC.Text += strIITCBeginSeq;
                 IntelToIITC(strTemp.Substring(index), loopCounter + 1);
             }
@@ -89,7 +95,7 @@ namespace IngressIntelToIITCDrawTool
                         tbIITC.Text += ',' + strIITClng + strTemp.Substring(0, indexUnderscore) + '}' + strIITCEndSeq + ',';
                         IntelToIITC(
                             strTemp.Substring(strTemp.IndexOf('_') + 1)
-                            , 1);
+                            , 0);
                     }
                     else
                     {
