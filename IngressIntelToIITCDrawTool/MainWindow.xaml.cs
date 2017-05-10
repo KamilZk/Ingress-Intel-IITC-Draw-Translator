@@ -33,25 +33,34 @@ namespace IngressIntelToIITCDrawTool
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
-            tbIntel.Text = "";
-            tbIITC.Text = "";
             rbIntelToIITC.IsChecked = true;
             tbIntel.Focus();
+            tbIntel.Text = "";
+            tbIITC.Text = "";
         }
 
         private void btnTranslate_Click(object sender, RoutedEventArgs e)
         {
-            if(rbIntelToIITC.IsChecked == true)
+            if (rbIntelToIITC.IsChecked == true)
             {
-                tbIITC.Text = "[";
-                IntelToIITC(tbIntel.Text, 0);
-                tbIITC.Text += ']';
+                if (tbIntel.Text == null || tbIntel.Text == "")
+                    tbIITC.Text = "Intel link window is empty!";
+                else
+                {
+                    tbIITC.Text = "[";
+                    IntelToIITC(tbIntel.Text, 0);
+                    tbIITC.Text += ']';
+                }
             }
             else if (rbIITCToIntel.IsChecked == true)
             {
-                //TODO: IITCToIntel method
+                if (tbIITC.Text == null || tbIntel.Text == "")
+                    tbIntel.Text = "IITC link window is empty!";
+                else
+                {
+                    //TODO: IITCToIntel method
+                }
             }
-
         }
 
         private void IntelToIITC(String strTemp, int loopCounter)

@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <Label Content="Intel:" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <TextBox x:Name="tbIntel" Margin="10,30,10,10" TextWrapping="Wrap"/>
+        <TextBox x:Name="tbIntel" Margin="10,30,10,10" TextWrapping="Wrap" ToolTip="Paste Intel link here"/>
 
         <Label Content="IITC:" HorizontalAlignment="Left" Margin="10,4,0,0" Grid.Row="1" VerticalAlignment="Top" FontWeight="Bold"/>
         <TextBox x:Name="tbIITC" Margin="10,30,10,10" Grid.Row="1" TextWrapping="Wrap"/>
