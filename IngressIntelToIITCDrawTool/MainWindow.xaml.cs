@@ -75,7 +75,7 @@ namespace IngressIntelToIITCDrawTool
         {            
             if(strTemp.Contains("pls="))
             {
-                int index = strTemp.IndexOf("pls=") + 4;
+                int index = strTemp.IndexOf("pls=") + 3;
                 tbIITC.Text += strIITCBeginSeq;
                 IntelToIITC(strTemp.Substring(index));
             }
@@ -83,12 +83,32 @@ namespace IngressIntelToIITCDrawTool
             {
                 int indexPrzecinek = -1, indexPodreslnik = -1;
 
-                if (strTemp.Contains(','))
+                if (strTemp[0] == '=') //first parameter (always in second recurency)
                 {
                     indexPrzecinek = strTemp.IndexOf(',');
-                    //tbIITC.Text += " zawiera przecinek " + indexPrzecinek;
+                    tbIITC.Text += "{" + strIITClat + strTemp.Substring(1, indexPrzecinek);
+                    IntelToIITC(strTemp.Substring(indexPrzecinek));
                 }
-                if (strTemp.Contains('_'))
+
+                else if (strTemp[0] == ',')
+                {
+                    if(strTemp.Contains('_'))
+                        indexPodreslnik = strTemp.IndexOf('_');
+
+                    if (strTemp.Substring(1).Contains(','))
+                        indexPrzecinek = strTemp.Substring(1).IndexOf(',');
+
+                    if (strTemp.Substring(1).IndexOf(',') > indexPodreslnik)
+                    {
+                        indexPrzecinek = strTemp.Substring(1).IndexOf(',') + 1;
+                        tbIITC.Text += "," + strIITClng + strTemp.Substring(1, indexPrzecinek) + "},";
+                    }
+
+                   
+
+                }
+
+                else if (strTemp[0] == '_')
                 { 
                     indexPodreslnik = strTemp.IndexOf('_');
                     //tbIITC.Text += " zawiera podreslnik " + indexPodreslnik;
