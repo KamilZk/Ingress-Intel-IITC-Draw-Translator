@@ -55,8 +55,6 @@ namespace IngressIntelToIITCDrawTool
 
                 //tbIITC.Text = strIITC;
                 
-
-                //indexP1latStart = strIntel.IndexOf("pls=") + 4;
                 //strTemp = strIntel.Substring(indexP1latStart);
 
             }
@@ -78,7 +76,7 @@ namespace IngressIntelToIITCDrawTool
             if(strTemp.Contains("pls="))
             {
                 int index = strTemp.IndexOf("pls=") + 4;
-                tbIITC.Text += strIITCBeginSeq + index;
+                tbIITC.Text += strIITCBeginSeq;
                 IntelToIITC(strTemp.Substring(index));
             }
             else 
@@ -86,12 +84,32 @@ namespace IngressIntelToIITCDrawTool
                 int indexPrzecinek = -1, indexPodreslnik = -1;
 
                 if (strTemp.Contains(','))
+                {
                     indexPrzecinek = strTemp.IndexOf(',');
+                    //tbIITC.Text += " zawiera przecinek " + indexPrzecinek;
+                }
                 if (strTemp.Contains('_'))
+                { 
                     indexPodreslnik = strTemp.IndexOf('_');
+                    //tbIITC.Text += " zawiera podreslnik " + indexPodreslnik;
+                }
+                
                 //TODO: sprawdzic czy indexPrzecinek>indexPodreslnik -> wartosc pierwsza
+                if (indexPrzecinek > indexPodreslnik)
+                {
+
+                }
 
                 //TODO: sprawdzic czy indexPodreslnik>indexPrzecinek -> zakończenie sekwencji i nowy zestaw
+                else if (indexPodreslnik > indexPrzecinek)
+                {
+                    //TODO: dopisanie zakończenia
+                    IntelToIITC(strTemp.Substring(indexPodreslnik+1));
+                }
+                else if (indexPrzecinek == -1 && indexPodreslnik == -1) //nie znaleziono przecinka i podkreslnika => koniec
+                {
+                    return;
+                }
 
                 //TODO: jeżeli oba indexy są puste to dodać koniec return
 
