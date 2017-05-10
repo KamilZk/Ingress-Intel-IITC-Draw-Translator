@@ -64,35 +64,37 @@ namespace IngressIntelToIITCDrawTool
             }
             else 
             {
-                int indexComma = -1;
+                int indexComma;
 
                 if (loopCounter == 1 || loopCounter == 3)
                 {
                     indexComma = strTemp.IndexOf(',');
-                    tbIITC.Text += '{' + strIITClat + strTemp.Substring(0, indexComma - 1);
+                    tbIITC.Text += '{' + strIITClat + strTemp.Substring(0, indexComma);
                     IntelToIITC(strTemp.Substring(indexComma + 1), loopCounter + 1);
                 }
 
-                else if (loopCounter == 2 || loopCounter == 4)
+                else if (loopCounter == 2 )
                 {
+
                     indexComma = strTemp.IndexOf(',');
-                    tbIITC.Text += ',' + strIITClng + strTemp.Substring(0, indexComma - 1) + '}';
+                    tbIITC.Text += ',' + strIITClng + strTemp.Substring(0, indexComma) + "},";
+                    IntelToIITC(strTemp.Substring(indexComma + 1), loopCounter + 1);
+                }
 
-                    if (loopCounter == 2)
-                    { 
-                        tbIITC.Text += ',';
-                        IntelToIITC(strTemp.Substring(indexComma + 1), loopCounter + 1);
-                    }
-                    else if (loopCounter == 4)
+                else if (loopCounter == 4)
+                {
+                    if (strTemp.Contains('_'))
                     {
-                        tbIITC.Text += strIITCEndSeq;
-
-                        if (strTemp.Contains('_'))
-                            IntelToIITC(
-                                strTemp.Substring(strTemp.IndexOf('_') + 1)
-                                , 1);
-                        else
-                            return;
+                        int indexUnderscore = strTemp.IndexOf('_');
+                        tbIITC.Text += ',' + strIITClng + strTemp.Substring(0, indexUnderscore) + '}' + strIITCEndSeq + ',';
+                        IntelToIITC(
+                            strTemp.Substring(strTemp.IndexOf('_') + 1)
+                            , 1);
+                    }
+                    else
+                    {
+                        tbIITC.Text += ',' + strIITClng + strTemp + '}' + strIITCEndSeq;
+                        return;
                     }
 
                 }
