@@ -20,8 +20,8 @@ namespace IngressIntelToIITCDrawTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string strIITCBeginSeq = "[{ \"type\":\"polyline\",\"latLngs\" [";
-        private string strIITCEndSeq = "],\"color\":\"#a24ac3\"}]";
+        private string strIITCBeginSeq = "{\"type\":\"polyline\",\"latLngs\":[";
+        private string strIITCEndSeq = "],\"color\":\"#a24ac3\"}";
         private string strIITClat = "\"lat\":";
         private string strIITClng = "\"lng\":";
 
@@ -36,27 +36,20 @@ namespace IngressIntelToIITCDrawTool
             tbIntel.Text = "";
             tbIITC.Text = "";
             rbIntelToIITC.IsChecked = true;
-            //strIntel = null;
-            //strIITC = null;
-            //strTemp = null;
-
+            tbIntel.Focus();
         }
 
         private void btnTranslate_Click(object sender, RoutedEventArgs e)
         {
             if(rbIntelToIITC.IsChecked == true)
             {
+                tbIITC.Text = "[";
                 IntelToIITC(tbIntel.Text, 0);
+                tbIITC.Text += ']';
             }
             else if (rbIITCToIntel.IsChecked == true)
             {
-                string strIITC = tbIITC.Text;
-
-                string strTemp = strIITC + " strTemp";
-
-                string strIntel = strTemp + " strIntel";
-
-                tbIntel.Text = strIntel;
+                //TODO: IITCToIntel method
             }
 
         }
@@ -65,66 +58,45 @@ namespace IngressIntelToIITCDrawTool
         {            
             if(strTemp.Contains("pls=") && loopCounter == 0)
             {
-                int index = strTemp.IndexOf("pls=") + 3;
+                int index = strTemp.IndexOf("pls=") + 4;
                 tbIITC.Text += strIITCBeginSeq;
                 IntelToIITC(strTemp.Substring(index), loopCounter + 1);
             }
             else 
             {
-                int indexPrzecinek = -1, indexPodreslnik = -1;
+                int indexComma = -1;
 
-                if (strTemp[0] == '=') //first parameter (always in second recurency)
+                if (loopCounter == 1 || loopCounter == 3)
                 {
-                    indexPrzecinek = strTemp.IndexOf(',');
-                    tbIITC.Text += "{" + strIITClat + strTemp.Substring(1, indexPrzecinek);
-                    IntelToIITC(strTemp.Substring(indexPrzecinek), loopCounter + 1);
+                    indexComma = strTemp.IndexOf(',');
+                    tbIITC.Text += '{' + strIITClat + strTemp.Substring(0, indexComma - 1);
+                    IntelToIITC(strTemp.Substring(indexComma + 1), loopCounter + 1);
                 }
 
-                else if (strTemp[0] == ',')
+                else if (loopCounter == 2 || loopCounter == 4)
                 {
-                    if(strTemp.Contains('_'))
-                        indexPodreslnik = strTemp.IndexOf('_');
+                    indexComma = strTemp.IndexOf(',');
+                    tbIITC.Text += ',' + strIITClng + strTemp.Substring(0, indexComma - 1) + '}';
 
-                    if (strTemp.Substring(1).Contains(','))
-                        indexPrzecinek = strTemp.Substring(1).IndexOf(',');
-
-                    if (strTemp.Substring(1).IndexOf(',') > indexPodreslnik)
+                    if (loopCounter == 2)
+                    { 
+                        tbIITC.Text += ',';
+                        IntelToIITC(strTemp.Substring(indexComma + 1), loopCounter + 1);
+                    }
+                    else if (loopCounter == 4)
                     {
-                        indexPrzecinek = strTemp.Substring(1).IndexOf(',') + 1;
-                        tbIITC.Text += "," + strIITClng + strTemp.Substring(1, indexPrzecinek) + "},";
+                        tbIITC.Text += strIITCEndSeq;
+
+                        if (strTemp.Contains('_'))
+                            IntelToIITC(
+                                strTemp.Substring(strTemp.IndexOf('_') + 1)
+                                , 1);
+                        else
+                            return;
                     }
 
-                   
-
                 }
 
-                else if (strTemp[0] == '_')
-                { 
-                    indexPodreslnik = strTemp.IndexOf('_');
-                    //tbIITC.Text += " zawiera podreslnik " + indexPodreslnik;
-                }
-                
-                //TODO: sprawdzic czy indexPrzecinek>indexPodreslnik -> wartosc pierwsza
-                if (indexPrzecinek > indexPodreslnik)
-                {
-
-                }
-
-                //TODO: sprawdzic czy indexPodreslnik>indexPrzecinek -> zakończenie sekwencji i nowy zestaw
-                else if (indexPodreslnik > indexPrzecinek)
-                {
-                    //TODO: dopisanie zakończenia
-                    IntelToIITC(strTemp.Substring(indexPodreslnik+1));
-                }
-                else if (indexPrzecinek == -1 && indexPodreslnik == -1) //nie znaleziono przecinka i podkreslnika => koniec
-                {
-                    return;
-                }
-
-                //TODO: jeżeli oba indexy są puste to dodać koniec return
-
-                //TODO: dodawanie sekwencji
-                //tbIITC.Text += strTemp + strIITCEndSeq; //test
             }
 
             return;
